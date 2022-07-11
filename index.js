@@ -9,7 +9,7 @@ var fs = require('fs')
 var armorArr = []
 var masterRankJson = {armorArr}
 
-
+this.breakfn()
 
 
 const url = 'https://monsterhunterrise.wiki.fextralife.com/Master+Rank+Armor'
