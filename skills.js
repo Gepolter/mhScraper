@@ -18,10 +18,13 @@ axios(url)
 
         
         
-        skillNames = []        
+        skillNames = []   
+
         has4Slot = []
         fourLvl = []
         skillSlots = []
+
+        decoArrays = []
         skillMaxLvls = []
         id = 0
         lvl4s = []
@@ -29,7 +32,16 @@ axios(url)
         dodged = 0
         $('#sub-main #wiki-content-block .table-responsive table tbody tr')
             .each(function(index, skillRow){
-                //check if deco lvl 4
+                //check if deco has appeared before
+                if(skillNames.some(skill => skill == $(skillRow).find('> td:nth-child(4) a').text().trim())){
+                    //if skill there, add to slot+skill_lvl its _deco_array
+                    firstOccurence = skillNames.find(skill => skill == $(skillRow).find('> td:nth-child(4) a').text().trim())
+                    firstIndex = skillNames.indexAt(firstOccurence)
+
+                    decoLvl = $(skillRow).find('> td:nth-child(2)').text().charAt(2)
+                    skillLvl = $(skillRow).find('> td:nth-child(4)').text().trim().split('').pop()
+                    decoArrays[firstIndex].push({_deco_lvl: decoLvl, _skill_lvl: skillLvl})
+                }
                 if($(skillRow).find('> td:nth-child(2)').text().charAt(2) == "4"){
                     lvl4s.push($(skillRow).find('> td:nth-child(4) a').text().trim())
                     lvl4sLvl.push($(skillRow).find('> td:nth-child(4)').text().trim().split('').pop())
@@ -75,14 +87,13 @@ axios(url)
                 const skill = {
                     _id: id,
                     _name: skillNames[id],
-                    _slot_id: skillSlots[id],
                     _maxLvl: skillMaxLvls[id],
-                    _deco_array:{
-                        _slot1lvls: 0,
-                        _slot2lvls: 0,
-                        _slot3lvls: 0,
-                        _slot4lvls: 0
-                    }
+                    _deco_array:[
+                        {_deco_lvl: 1, skill_lvl: 0},
+                        {_deco_lvl: 2, skill_lvl: 0},
+                        {_deco_lvl: 3, skill_lvl: 0},
+                        {_deco_lvl: 4, skill_lvl: 0},
+                    ]
     
                 }
                 skillArr.push(skill)
